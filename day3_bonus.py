@@ -20,23 +20,29 @@ def specialFabric():
 		fabrics.append(boxData.ID)
 		i = int(boxData.position.split(",")[0])
 		j = int(boxData.position.split(",")[1])
-		for k,l in zip(range(int(boxData.size.split("x")[0])),range(int(boxData.size.split("x")[1]))):
-			fabric[str(i+k)+","+str(j+l)] += 1
-
+		for k in range(int(boxData.size.split("x")[0])):
+			for l in range(int(boxData.size.split("x")[1])):
+				fabric[str(i+k)+","+str(j+l)] += 1
+				
 	for line in inputLines:
 		boxData = parseLine(line)
 		i = int(boxData.position.split(",")[0])
 		j = int(boxData.position.split(",")[1])
-		for k,l in zip(range(int(boxData.size.split("x")[0])),range(int(boxData.size.split("x")[1]))):
-			if fabric[str(i+k)+","+str(j+l)] >= 2:
-				print "REMOVING: ",boxData.ID
-				fabrics.remove(boxData.ID)
+		shouldBreak = False
+		for k in range(int(boxData.size.split("x")[0])):
+			for l in range(int(boxData.size.split("x")[1])):
+				if fabric[str(i+k)+","+str(j+l)] > 1:
+					fabrics.remove(boxData.ID)
+					shouldBreak = True
+					break
+			if shouldBreak:
 				break
-							
+
 	return fabrics
 
 
 inputLines = readFile()
-print specialFabric()
+for boxID in specialFabric():
+	print boxID
 
 
