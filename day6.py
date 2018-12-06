@@ -15,6 +15,10 @@ def readFile():
 
 #distance = hypot(current[0]-coordinate[0],current[1]-coordinate[1])
 
+def getPointValue(coordinates,currentPoint):
+	for i,coordinate in enumerate(coordinates):
+		distances[i] = hypot(coordinate[0]-currentPoint[0],coordinate[1]-currentPoint[1])
+
 def makeGrid(coordinates):
 	maxV = 0
 	maxH = 0
@@ -31,6 +35,7 @@ def makeGrid(coordinates):
 				print counter,
 				counter += 1
 			else:
+				valueForCoordinate = getPointValue(coordinates,currentPoint)
 				print ".",
 		print
 
