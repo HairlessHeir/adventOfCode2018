@@ -1,5 +1,4 @@
 from collections import defaultdict,namedtuple
-from math import hypot
 
 
 
@@ -16,8 +15,21 @@ def readFile():
 #distance = hypot(current[0]-coordinate[0],current[1]-coordinate[1])
 
 def getPointValue(coordinates,currentPoint):
+	distances = {}
+	minDistance = 1000000
 	for i,coordinate in enumerate(coordinates):
-		distances[i] = hypot(coordinate[0]-currentPoint[0],coordinate[1]-currentPoint[1])
+		distances[i] = abs(coordinate[0]-currentPoint[0])+abs(coordinate[1]-currentPoint[1])
+		if distances[i]<=minDistance:
+			minDistance=distances[i]
+	count = 0
+	myKey = ""
+	for key,value in zip(distances.keys(),distances.values()):
+		if value == minDistance:
+			count += 1
+			myKey = key
+	if count > 1:
+		myKey = "."
+	return myKey
 
 def makeGrid(coordinates):
 	maxV = 0
@@ -32,11 +44,11 @@ def makeGrid(coordinates):
 		for j in range(maxV):
 			currentPoint = point(i,j)
 			if currentPoint in coordinates:
-				print counter,
+				print "+"
 				counter += 1
 			else:
 				valueForCoordinate = getPointValue(coordinates,currentPoint)
-				print ".",
+				print valueForCoordinate,
 		print
 
 makeGrid(readFile())
