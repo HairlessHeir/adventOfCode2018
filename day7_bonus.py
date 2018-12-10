@@ -44,12 +44,12 @@ def treePartWithParent(parent,completeTree):
 
 def travelNodes(nodes):
 	letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	bufferStepTime = 0#60
+	bufferStepTime = 60
 	stepTimes = {}
 	for i,letter in enumerate(letters):
 		stepTimes[letter] = bufferStepTime+i+1
-	numOfWorkers = 2
-	workers = []
+	numOfWorkers = 5
+	workersForSteps = []
 
 	childrenSet = set()
 	childrenDict = defaultdict(lambda : 0)
@@ -72,52 +72,51 @@ def travelNodes(nodes):
 	stepQueue = []
 	for stepNode in firsts:
 		stepQueue.append(stepNode)
-	print "ste:",stepQueue
 	traveledNodes = []
+	totalTime = 0
+
 	while True:
-
-		for work in workers:
-			stepTimes[work] -= 1	
-			print "WORK: ",work," - ",stepTimes[work]
-			if stepTimes[work] <= 0:
-				traveledNodes.append(work)
-				break
-		for work in traveledNodes:
-			print "traveledNodes","work: ",work, " - " , workers
-			if work in workers:
-				workers.remove(work)
-
 		timesToTry = len(stepQueue)
 		while True:
-			#print "--: ",stepQueue,workers,traveledNodes,stepTimes
 			if len(stepQueue) == 0:
 				break
 			if canReachStep(stepQueue[0],stepList, traveledNodes,1):
-				if len(workers) >= numOfWorkers:
+				if len(workersForSteps) == numOfWorkers:
 					break
-				if stepQueue[0] not in workers and stepQueue[0] not in traveledNodes:
+				if stepQueue[0] not in workersForSteps and stepQueue[0] not in traveledNodes:
 					current = stepQueue.pop(0)
-					workers.append(current)
+					workersForSteps.append(current)
 			else:
 				temp = stepQueue.pop(0)
 				stepQueue.append(temp)
 			timesToTry -= 1
-			if timesToTry <= 0:
+			if timesToTry == 0:
 				break
 
-		for worker in workers:
+		for worker in workersForSteps:
 			for value in treePartWithParent(worker,stepList):
-				if value not in stepQueue and value not in workers:
+				if value not in stepQueue and value not in workersForSteps:
 					stepQueue.append(value)
 		stepQueue.sort()
-		if len(stepQueue) == 0:
+		if len(stepQueue) == 0 and len(workersForSteps) == 0:
 			break
+		
+		for singleWorker in workersForSteps:
+			stepTimes[singleWorker] -= 1	
+			if stepTimes[singleWorker] == 0:
+				traveledNodes.append(singleWorker)
+		for work in traveledNodes:
+			if work in workersForSteps:
+				workersForSteps.remove(work)
+		totalTime += 1
+
 
 	stringNodes = ""
 	for node in traveledNodes:
 		stringNodes += node
 	
+	print "T: ",totalTime
 	print stringNodes
 
 
-travelNodes(readFile("input7_test.txt"))
+travelNodes(readFile("input7.txt"))
