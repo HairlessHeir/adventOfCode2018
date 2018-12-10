@@ -43,6 +43,10 @@ def treePartWithParent(parent,completeTree):
 	return myTree
 
 def travelNodes(nodes):
+	letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	bufferStepTime = 60
+	for i,letter in enumerate(letters):
+		workers[letter] = bufferStepTime+i+1
 	numOfWorkers = 2
 	workers = {}
 	for i in range(numOfWorkers):
