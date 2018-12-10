@@ -83,8 +83,11 @@ def travelNodes(nodes):
 				traveledNodes.append(work)
 				break
 		for work in traveledNodes:
-			workers.remove(work)
+			print "traveledNodes","work: ",work, " - " , workers
+			if work in workers:
+				workers.remove(work)
 
+		timesToTry = len(stepQueue)
 		while True:
 			#print "--: ",stepQueue,workers,traveledNodes,stepTimes
 			if len(stepQueue) == 0:
@@ -98,6 +101,9 @@ def travelNodes(nodes):
 			else:
 				temp = stepQueue.pop(0)
 				stepQueue.append(temp)
+			timesToTry -= 1
+			if timesToTry <= 0:
+				break
 
 		for worker in workers:
 			for value in treePartWithParent(worker,stepList):
