@@ -1,7 +1,5 @@
 from collections import defaultdict,namedtuple
 
-
-
 point = namedtuple("point",["x","y"])
 
 def readFile(fileName):
