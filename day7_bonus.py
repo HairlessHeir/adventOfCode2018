@@ -44,13 +44,12 @@ def treePartWithParent(parent,completeTree):
 
 def travelNodes(nodes):
 	letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	bufferStepTime = 60
+	bufferStepTime = 0#60
+	stepTimes = {}
 	for i,letter in enumerate(letters):
-		workers[letter] = bufferStepTime+i+1
+		stepTimes[letter] = bufferStepTime+i+1
 	numOfWorkers = 2
-	workers = {}
-	for i in range(numOfWorkers):
-		workers[i] = ""
+	workers = []
 
 	childrenSet = set()
 	childrenDict = defaultdict(lambda : 0)
@@ -73,22 +72,37 @@ def travelNodes(nodes):
 	stepQueue = []
 	for stepNode in firsts:
 		stepQueue.append(stepNode)
+	print "ste:",stepQueue
 	traveledNodes = []
-	traveledNodes.append(current)
 	while True:
-		while True:
-			if canReachStep(stepQueue[0],stepList, traveledNodes,1):
-				current = stepQueue.pop(0)
-				if current not in traveledNodes:
-					traveledNodes.append(current)
+
+		for work in workers:
+			stepTimes[work] -= 1	
+			print "WORK: ",work," - ",stepTimes[work]
+			if stepTimes[work] <= 0:
+				traveledNodes.append(work)
 				break
+		for work in traveledNodes:
+			workers.remove(work)
+
+		while True:
+			#print "--: ",stepQueue,workers,traveledNodes,stepTimes
+			if len(stepQueue) == 0:
+				break
+			if canReachStep(stepQueue[0],stepList, traveledNodes,1):
+				if len(workers) >= numOfWorkers:
+					break
+				if stepQueue[0] not in workers and stepQueue[0] not in traveledNodes:
+					current = stepQueue.pop(0)
+					workers.append(current)
 			else:
 				temp = stepQueue.pop(0)
 				stepQueue.append(temp)
 
-		for value in treePartWithParent(current,stepList):
-			if value not in stepQueue:
-				stepQueue.append(value)
+		for worker in workers:
+			for value in treePartWithParent(worker,stepList):
+				if value not in stepQueue and value not in workers:
+					stepQueue.append(value)
 		stepQueue.sort()
 		if len(stepQueue) == 0:
 			break
