@@ -5,17 +5,34 @@ def readFile(filename):
             fileData.append(int(numData))
     return fileData
 
-def makeTree(leftovers):
+def makeTree(leftovers, level):
+    #print "B_leftovers:",leftovers
+    totals = 0
     node = {}
+    node["metadata"] = []
     childrenAmount = int(leftovers[0])
     metadataAmount = int(leftovers[1])
-    for i in range(childrenAmount):
-        node[i] = dict()
-    node["metadata"] = leftovers[-metadataAmount:]
+    #print "   "*level,"Node:({0},{1})".format(childrenAmount,metadataAmount)
+    leftovers = leftovers[2:]
+    if childrenAmount == 0:
+        node["metadata"] = leftovers[:metadataAmount]
+        leftovers = leftovers[metadataAmount:]
+    else:
+        for i in range(childrenAmount):
+            node[i],leftovers,total = makeTree(leftovers,level+1)
+            totals += total
 
-    leftovers = leftovers[2:-metadataAmount]
-    print node, leftovers
-    return node
+    if not node["metadata"]:
+        node["metadata"] = leftovers[:metadataAmount]
+        leftovers = leftovers[metadataAmount:]
+
+    totals += sum(node["metadata"])
+    #print "   "*(level),"-data:",str(node["metadata"]),":",totals
+    #print "A_leftovers:", leftovers
+    return (node,leftovers,totals)
 
 tree = {}
-tree = makeTree(readFile("input8_test.txt"))
+listOfTree = readFile("input8.txt")
+#print listOfTree
+tree = makeTree(listOfTree,0)
+print tree[2]
