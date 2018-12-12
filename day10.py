@@ -24,6 +24,7 @@ points = readFile("input10.txt")
 totalTime = 0
 distance = 120
 while True:
+    totalTime += 1
     pointsForPrinting = []
     maxX,maxY = 0,0
     minX = points[0][0]
@@ -43,9 +44,8 @@ while True:
 
         pointsForPrinting.append([points[i][0],points[i][1]])
     if maxX-minX<distance and maxY-minY<distance:
+        print "TIME FOR NEXT MESSAGE:",totalTime
         printMessage(pointsForPrinting,minX,maxX,minY,maxY)
-        print totalTime
-    totalTime += 1
 
     if totalTime > 11000:
         break
