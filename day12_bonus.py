@@ -34,12 +34,9 @@ def runSimulation(initState,instructions,generations):
             initState[k] = v
         for (k,v) in initState.items():
             if v == "#":
-                print k,
                 totalSum+= k+50000000000-103
-        print
         newPotValues.clear()
-        #print i, genString
-        print i+1,totalSum
+    print totalSum
 
 initialState, instructionSet = readFile("input12.txt")
 runSimulation(initialState,instructionSet,103)
