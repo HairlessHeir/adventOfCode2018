@@ -4,7 +4,7 @@ from collections import namedtuple
 
 def readFile():	
 	lines = []
-	with open("input3.txt") as f:
+	with open("inputPero3.txt") as f:
 		lines = f.readlines()
 	return lines
 

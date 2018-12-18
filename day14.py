@@ -21,3 +21,6 @@ finalScore = ""
 for i in currentRecipes[recipeOffset:recipeOffset+10]:
     finalScore += str(i)
 print finalScore
+
+
+
