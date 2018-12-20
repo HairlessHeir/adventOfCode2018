@@ -3,11 +3,11 @@ def instructionCounterImproved(instruction,valuesBefore,valuesAfter):
     #b0,b1,b2,b3 = valuesBefore[0],valuesBefore[1],valuesBefore[2],valuesBefore[3]
     #a0,a1,a2,a3 = valuesAfter[0],valuesAfter[1],valuesAfter[2],valuesAfter[3]
     i1,i2,i3 = instruction[1],instruction[2],instruction[3]
-    print i1,i2,i3, " : " ,valuesBefore," : ",valuesAfter
+    #print i1,i2,i3, " : " ,valuesBefore," : ",valuesAfter
     count = 0
     for opcode in opcodes:
         temp = valuesBefore[:]
-        print opcode,"_CT:",temp," : ",instruction," : ",valuesAfter
+        #print opcode,"_CT:",temp," : ",instruction," : ",valuesAfter
         if opcode == "addr":
             temp[i3] = valuesBefore[i1] + valuesBefore[i2]
         elif opcode == "addi":
@@ -66,10 +66,10 @@ def instructionCounterImproved(instruction,valuesBefore,valuesAfter):
                 shouldCount = False
                 break
         if shouldCount:
-            print "-------:",opcode
+            #print "-------:",opcode
             count += 1
-        print "         ->:",temp,valuesBefore,valuesAfter
-        print
+        #print "         ->:",temp,valuesBefore,valuesAfter
+        #print
         temp = []
     return count
 
@@ -166,9 +166,9 @@ def solveInstructions(name):
                     totalNum += 1
                 lineCounter = 0
                 instGroup = []
-                print
-                print "##############################################################"
-                print
+                #print
+                #print "##############################################################"
+                #print
 
-        print totalNum, totalCount
+        print totalNum
 solveInstructions("input16.txt")
