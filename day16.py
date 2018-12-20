@@ -1,3 +1,78 @@
+def instructionCounterImproved(instruction,valuesBefore,valuesAfter):
+    opcodes = ["addr","addi","mulr","muli","banr","bani","borr","bori","setr","seti","gtir","gtri","gtrr","eqir","eqri","eqrr"]
+    #b0,b1,b2,b3 = valuesBefore[0],valuesBefore[1],valuesBefore[2],valuesBefore[3]
+    #a0,a1,a2,a3 = valuesAfter[0],valuesAfter[1],valuesAfter[2],valuesAfter[3]
+    i1,i2,i3 = instruction[1],instruction[2],instruction[3]
+    print i1,i2,i3, " : " ,valuesBefore," : ",valuesAfter
+    count = 0
+    for opcode in opcodes:
+        temp = valuesBefore[:]
+        print opcode,"_CT:",temp," : ",instruction," : ",valuesAfter
+        if opcode == "addr":
+            temp[i3] = valuesBefore[i1] + valuesBefore[i2]
+        elif opcode == "addi":
+            temp[i3] = valuesBefore[i1] + i2
+        elif opcode == "mulr":
+            temp[i3] = valuesBefore[i1] * valuesBefore[i2]
+        elif opcode == "muli":
+            temp[i3] = valuesBefore[i1] * i2
+        elif opcode == "banr":
+            temp[i3] = valuesBefore[i1] & valuesBefore[i2]
+        elif opcode == "bani":
+            temp[i3] = valuesBefore[i1] & i2
+        elif opcode == "borr":
+            temp[i3] = valuesBefore[i1] | valuesBefore[i2]
+        elif opcode == "bori":
+            temp[i3] = valuesBefore[i1] | i2
+        elif opcode == "setr":
+            temp[i3] = valuesBefore[i1]
+        elif opcode == "seti":
+            temp[i3] = i1
+        elif opcode == "gtir":
+            if i1 > valuesBefore[i2]:
+                temp[i3] = 1
+            else:
+                temp[i3] = 0
+        elif opcode == "gtri":
+            if valuesBefore[i1] > i2:
+                temp[i3] = 1
+            else:
+                temp[i3] = 0
+        elif opcode == "gtrr":
+            if valuesBefore[i1] > valuesBefore[i2]:
+                temp[i3] = 1
+            else:
+                temp[i3] = 0
+        elif opcode == "eqir":
+            if i1 == valuesBefore[i2]:
+                temp[i3] = 1
+            else:
+                temp[i3] = 0
+        elif opcode == "eqri":
+            if i2 == valuesBefore[i1]:
+                temp[i3] = 1
+            else:
+                temp[i3] = 0
+        elif opcode == "eqrr":
+            if valuesBefore[i1] == valuesBefore[i2]:
+                temp[i3] = 1 
+            else:
+                temp[i3] = 0
+
+        
+        shouldCount = True
+        for i,j in zip(temp,valuesAfter):
+            if i!=j:
+                shouldCount = False
+                break
+        if shouldCount:
+            print "-------:",opcode
+            count += 1
+        print "         ->:",temp,valuesBefore,valuesAfter
+        print
+        temp = []
+    return count
+
 def instructionCounter(instruction,valuesBefore,valuesAfter):
     opcodes = ["addr","addi","mulr","muli","banr","bani","borr","bori","setr","seti","gtir","gtri","gtrr","eqir","eqri","eqrr"]
     #b0,b1,b2,b3 = valuesBefore[0],valuesBefore[1],valuesBefore[2],valuesBefore[3]
@@ -87,11 +162,13 @@ def solveInstructions(name):
                 lineCounter += 1
             elif lineCounter == 3:
                 totalCount += 1
-                if instructionCounter(instGroup[1], instGroup[0], instGroup[2]) >= 3:
+                if instructionCounterImproved(instGroup[1], instGroup[0], instGroup[2]) >= 3:
                     totalNum += 1
                 lineCounter = 0
                 instGroup = []
-                break
+                print
+                print "##############################################################"
+                print
 
         print totalNum, totalCount
 solveInstructions("input16.txt")
